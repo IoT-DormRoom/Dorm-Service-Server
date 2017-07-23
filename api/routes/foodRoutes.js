@@ -6,8 +6,8 @@ module.exports = function(app) {
 		.get(food.getAllFood)
 		.post(food.addFood);
 
-/*	app.route('/tasks/:foodId')
-		.get(food.getFood)
-		.put(food.updateFood)
-		.delete(food.deleteFood);*/
+	app.route('/food/:foodId')
+		.get(food.getFood);
+		//.put(food.updateFood)
+		//.delete(food.deleteFood);
 };

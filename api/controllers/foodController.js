@@ -21,6 +21,14 @@ module.exports.getAllFood = function(req, res) {
 	});
 }
 
+module.exports.getFood = function(req, res) {
+	var db = admin.database();
+	var ref = db.ref('/Refrigerator/Food/' + req.params.foodId);
+	ref.once('value', function(snapshot) {
+		res.json(snapshot);
+	});
+}
+
 module.exports.addFood = function(req, res) {
 	var db = admin.database();
 	var food = req.body;
