@@ -1,0 +1,31 @@
+{
+  "name": "Dorm-Service-Server",
+  "version": "1.0.0",
+  "description": "RESTful API for IoT Dorm Room",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IoT-DormRoom/Dorm-Service-Server.git"
+  },
+  "keywords": [],
+  "author": "Brendan Horng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IoT-DormRoom/Dorm-Service-Server/issues"
+  },
+  "homepage": "https://github.com/IoT-DormRoom/Dorm-Service-Server#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "fermata": "^0.11.0-beta1",
+    "firebase-admin": "^5.0.0",
+    "jquery": "^1.7.4",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
