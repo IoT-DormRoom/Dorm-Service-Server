@@ -1,8 +1,9 @@
 'use strict';
 
 var _und = require("underscore");
+var model = require("./model");
 
-module.exports.foodModel = {
+module.exports.model = {
 	name: {
 		type: 'string',
 		required: true
@@ -22,21 +23,6 @@ module.exports.foodModel = {
 }
 
 module.exports.verify = function(food) {
-	return !hasInvalidFields(food, this.foodModel)
-		&& hasRequiredFields(food, this.foodModel);
-}
-
-function hasRequiredFields(obj, schema) {
-	return _und.chain(schema)
-		.keys()
-		.filter(key => schema[key].required)
-		.every(key => _und.has(obj, key))
-		.value();
-}
-
-function hasInvalidFields(obj, schema) {
-	return !_und.chain(obj)
-		.keys()
-		.every(key => _und.has(schema, key))
-		.value();
+	return !model.hasInvalidFields(food, this.model)
+		&& model.hasRequiredFields(food, this.model);
 }

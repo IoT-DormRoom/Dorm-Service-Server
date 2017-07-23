@@ -7,7 +7,7 @@ module.exports = function(app) {
 		.post(food.addFood);
 
 	app.route('/food/:foodId')
-		.get(food.getFood);
-		//.put(food.updateFood)
+		.get(food.getFood)
+		.put(food.updateFood)
 		//.delete(food.deleteFood);
 };

@@ -1,6 +1,7 @@
 'use strict';
 var admin = require('firebase-admin');
 var foodModel = require('../models/foodModel');
+var model = require('../models/model');
 var _und = require("underscore");
 
 var privateKey = (process.env.FIREBASE_PRIVATE_KEY).replace(/\\n/g,'\n');
@@ -29,6 +30,31 @@ module.exports.getFood = function(req, res) {
 	});
 }
 
+module.exports.updateFood = function(req, res) {
+	var db = admin.database();
+	var food = req.body;
+
+	if (!model.hasInvalidFields(food, foodModel.model)) {
+		foodExists(req.params.foodId).then(exists => {
+			if (exists) {
+				var foodRef = db.ref('/Refrigerator/Food');
+				foodRef.child(req.params.foodId).set(_und.omit(food, 'name'));
+				res.status(200).jsonp({
+					message: 'success'
+				});
+			} else {
+				res.status(500).jsonp({
+					error: 'Food "' + food.name + '" does not exist'
+				});
+			}
+		});
+	} else {
+		res.status(500).jsonp({
+			error: 'Please check submitted parameters.'
+		});
+	}
+}
+
 module.exports.addFood = function(req, res) {
 	var db = admin.database();
 	var food = req.body;
@@ -41,10 +67,10 @@ module.exports.addFood = function(req, res) {
 				var foodRef = db.ref('/Refrigerator/Food');
 				foodRef.child(food.name).set(_und.omit(food, 'name'));
 				res.status(200).jsonp({
-					message: 'success'	
+					message: 'success'
 				});
 			} else {
-				res.status(500).jsonp({ 
+				res.status(500).jsonp({
 					error: 'Food "' + food.name + '" already exists'
 				});
 			}
