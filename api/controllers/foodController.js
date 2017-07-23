@@ -44,7 +44,7 @@ module.exports.updateFood = function(req, res) {
 				});
 			} else {
 				res.status(500).jsonp({
-					error: 'Food "' + food.name + '" does not exist'
+					error: 'Food "' + req.params.foodId + '" does not exist'
 				});
 			}
 		});
@@ -80,6 +80,24 @@ module.exports.addFood = function(req, res) {
 			error: 'Please check submitted parameters.'
 		});
 	}
+}
+
+module.exports.deleteFood = function(req, res) {
+	var db = admin.database();
+
+	foodExists(req.params.foodId).then(exists => {
+		if (exists) {
+			var foodRef = db.ref('/Refrigerator/Food/' + req.params.foodId);
+			foodRef.remove();
+			res.status(200).jsonp({
+				message: 'success'
+			});
+		} else {
+			res.status(500).jsonp({
+				error: 'Food "' + req.params.foodId + '" does not exist'
+			});
+		}
+	});
 }
 
 function foodExists(foodName, callback) {

@@ -9,5 +9,5 @@ module.exports = function(app) {
 	app.route('/food/:foodId')
 		.get(food.getFood)
 		.put(food.updateFood)
-		//.delete(food.deleteFood);
+		.delete(food.deleteFood);
 };
