@@ -71,7 +71,23 @@ module.exports.addRecipe = function(req, res) {
 	}
 }
 
-module.exports.deleteFood = function(req, res) {
+module.exports.deleteRecipe = function(req, res) {
+	var db = admin.database();
+
+	recipeExists(req.params.recipeId).then(exists => {
+		if (exists) {
+			var recipeRef = db.ref('/Refrigerator/Recipe/' +
+				req.params.recipeId);
+			recipeRef.remove();
+			res.status(200).jsonp({
+				message: 'success'
+			});
+		} else {
+			res.status(500).jsonp({
+				error: 'Food "' + req.params.recipeId + '" does not exist'
+			});
+		}
+	});
 }
 
 function recipeExists(recipeName, callback) {

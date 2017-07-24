@@ -8,6 +8,6 @@ module.exports = function(app) {
 
 	app.route('/recipe/:recipeId')
 		.get(recipe.getRecipe)
-		.put(recipe.updateRecipe);
-	//	.delete(recipe.deleteRecipe);
+		.put(recipe.updateRecipe)
+		.delete(recipe.deleteRecipe);
 };
