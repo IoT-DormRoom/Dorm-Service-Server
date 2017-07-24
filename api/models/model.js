@@ -11,8 +11,6 @@ module.exports.hasRequiredFields = function(obj, schema) {
 }
 
 module.exports.hasInvalidFields = function(obj, schema) {
-	console.log(obj);
-	console.log(schema);
 	return !_und.chain(obj)
 		.keys()
 		.every(key => _und.has(schema, key))

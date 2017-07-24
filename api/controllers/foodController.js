@@ -37,8 +37,8 @@ module.exports.updateFood = function(req, res) {
 	if (!model.hasInvalidFields(food, foodModel.model)) {
 		foodExists(req.params.foodId).then(exists => {
 			if (exists) {
-				var foodRef = db.ref('/Refrigerator/Food');
-				foodRef.child(req.params.foodId).set(_und.omit(food, 'name'));
+				var foodRef = db.ref('/Refrigerator/Food/' + req.params.foodId);
+				foodRef.update(food);
 				res.status(200).jsonp({
 					message: 'success'
 				});
@@ -59,13 +59,11 @@ module.exports.addFood = function(req, res) {
 	var db = admin.database();
 	var food = req.body;
 
-	console.log(foodModel.verify(food));
 	if (foodModel.verify(food)) {
 		foodExists(food.name).then(exists => {
 			if (!exists) {
-				console.log("Adding " + food.name);
-				var foodRef = db.ref('/Refrigerator/Food');
-				foodRef.child(food.name).set(_und.omit(food, 'name'));
+				var foodRef = db.ref('/Refrigerator/Food/');
+				foodRef.push(food);
 				res.status(200).jsonp({
 					message: 'success'
 				});
