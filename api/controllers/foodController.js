@@ -4,16 +4,6 @@ var foodModel = require('../models/foodModel');
 var model = require('../models/model');
 var _und = require("underscore");
 
-var privateKey = (process.env.FIREBASE_PRIVATE_KEY).replace(/\\n/g,'\n');
-var clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-admin.initializeApp({
-	credential: admin.credential.cert({
-		"private_key": privateKey,
-		"client_email": clientEmail
-	}),
-	databaseURL: "https://iot-dormroom-9558c.firebaseio.com/"
-});
-
 module.exports.getAllFood = function(req, res) {
 	var db = admin.database();
 	var ref = db.ref('/Refrigerator/Food');
