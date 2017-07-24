@@ -20,7 +20,30 @@ module.exports.getRecipe = function(req, res) {
 	});
 }
 
-module.exports.updateFood = function(req, res) {
+module.exports.updateRecipe = function(req, res) {
+	var db = admin.database();
+	var recipe = req.body;
+
+	if (!model.hasInvalidFields(recipe, recipeModel.model)) {
+		recipeExists(req.params.recipeId).then(exists => {
+			if (exists) {
+				var recipeRef = db.ref('/Refrigerator/Recipe/' +
+					req.params.recipeId);
+				recipeRef.update(recipe);
+				res.status(200).jsonp({
+					message: 'success'
+				});
+			} else {
+				res.status(500).jsonp({
+					error: 'Recipe "' + req.params.recipeId + '" does not exist'
+				});
+			}
+		});
+	} else {
+		res.status(500).jsonp({
+			error: 'Please check submitted parameters.'
+		});
+	}
 }
 
 module.exports.addRecipe = function(req, res) {
