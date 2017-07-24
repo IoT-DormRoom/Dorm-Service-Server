@@ -3,8 +3,8 @@ module.exports = function(app) {
 	var recipe = require('../controllers/recipeController');
 
 	app.route('/recipe')
-		.get(recipe.getAllRecipe);
-		//.post(recipe.addRecipe);
+		.get(recipe.getAllRecipe)
+		.post(recipe.addRecipe);
 
 	/*app.route('/recipe/:recipeId')
 		.get(recipe.getRecipe)

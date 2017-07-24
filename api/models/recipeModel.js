@@ -25,7 +25,7 @@ module.exports.ingredient = {
 	}
 }
 
-module.exports.verify = function(food) {
-	return !model.hasInvalidFields(food, this.model)
-		&& model.hasRequiredFields(food, this.model);
+module.exports.verify = function(recipe) {
+	return !model.hasInvalidFields(recipe, this.model)
+		&& model.hasRequiredFields(recipe, this.model);
 }

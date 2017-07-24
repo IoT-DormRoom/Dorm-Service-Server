@@ -1,6 +1,6 @@
 'use strict';
 var admin = require('firebase-admin');
-var foodModel = require('../models/foodModel');
+var recipeModel = require('../models/recipeModel');
 var model = require('../models/model');
 var _und = require("underscore");
 
@@ -23,7 +23,29 @@ module.exports.getRecipe = function(req, res) {
 module.exports.updateFood = function(req, res) {
 }
 
-module.exports.addFood = function(req, res) {
+module.exports.addRecipe = function(req, res) {
+	var db = admin.database();
+	var recipe = req.body;
+
+	if (recipeModel.verify(recipe)) {
+		recipeExists(recipe.name).then(exists => {
+			if (!exists) {
+				var recipeRef = db.ref('/Refrigerator/Recipe/');
+				recipeRef.push(recipe);
+				res.status(200).jsonp({
+					message: 'success'
+				});
+			} else {
+				res.status(500).jsonp({
+					error: 'Recipe "' + recipe.name + '" already exists'
+				});
+			}
+		});
+	} else {
+		res.status(500).jsonp({
+			error: 'Please check submitted parameters.'
+		});
+	}
 }
 
 module.exports.deleteFood = function(req, res) {
