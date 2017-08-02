@@ -13,4 +13,7 @@ module.exports = function(app) {
 
 	app.route('/recipe/:recipeId/canMake')
 		.get(recipe.canMakeRecipe);
+
+	app.route('/recipe/:recipeId/make')
+		.put(recipe.makeRecipe);
 };
