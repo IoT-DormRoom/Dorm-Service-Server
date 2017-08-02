@@ -90,6 +90,83 @@ module.exports.deleteRecipe = function(req, res) {
 	});
 }
 
+module.exports.canMakeRecipe = function(req, res) {
+	var db = admin.database();
+	recipeExists(req.params.recipeId).then(exists => {
+		if (exists) {
+			var recipeRef = db.ref('/Refrigerator/Recipe/' +
+				req.params.recipeId);
+			return recipeRef.once('value');
+		} else {
+			res.status(500).jsonp({
+				error: 'Recipe "' + req.params.recipeId + '" does not exist'
+			});
+		}
+	})
+	.then(recipe => {
+		db.ref('/Refrigerator/Food/').once('value')
+		.then(availFood => {
+			var foodQuantity = _und.mapObject(availFood.val(),
+				(val, key) => val.quantity);
+			var enoughIngredients =
+				_und.every(recipe.val().ingredients,
+					ingredient =>
+						foodQuantity[ingredient.foodId] >= ingredient.quantity);
+			res.status(200).jsonp({
+				status: enoughIngredients
+			});
+		});
+	});
+}
+
+module.exports.makeRecipe = function(req, res) {
+	var db = admin.database();
+	recipeExists(req.params.recipeId).then(exists => {
+		if (exists) {
+			var recipeRef = db.ref('/Refrigerator/Recipe/' +
+				req.params.recipeId);
+			return recipeRef.once('value');
+		} else {
+			res.status(500).jsonp({
+				error: 'Recipe "' + req.params.recipeId + '" does not exist'
+			});
+		}
+	})
+	.then(recipe => {
+		var foodRef = db.ref('/Refrigerator/Food/');
+		foodRef.once('value')
+		.then(availFood => {
+			var foodQuantity = _und.mapObject(availFood.val(),
+				(val, key) => val.quantity);
+			var enoughIngredients =
+				_und.every(recipe.val().ingredients,
+					ingredient =>
+						foodQuantity[ingredient.foodId] >= ingredient.quantity);
+			if (!enoughIngredients) {
+				res.status(500).jsonp({
+					error: 'Insufficient ingredients to make recipe: ' +
+						req.params.recipeId
+				});
+			} else {
+				var updatedFood =
+					_und.chain(recipe.val().ingredients)
+						.map(ingredient => [availFood.val()[ingredient.foodId],
+							ingredient])
+						.map(pair => {
+							pair[0].quantity -= pair[1].quantity
+							return [pair[1].foodId, pair[0]];
+						})
+						.object()
+						.value();
+				foodRef.update(updatedFood);
+				res.status(200).jsonp({
+					status: 'Success'
+				});
+			}
+		});
+	});
+}
+
 function recipeExists(recipeName, callback) {
 	return new Promise(function(resolve, reject) {
 		var db = admin.database();

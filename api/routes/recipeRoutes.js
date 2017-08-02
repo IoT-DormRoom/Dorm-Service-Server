@@ -10,4 +10,10 @@ module.exports = function(app) {
 		.get(recipe.getRecipe)
 		.put(recipe.updateRecipe)
 		.delete(recipe.deleteRecipe);
+
+	app.route('/recipe/:recipeId/canMake')
+		.get(recipe.canMakeRecipe);
+
+	app.route('/recipe/:recipeId/make')
+		.put(recipe.makeRecipe);
 };
