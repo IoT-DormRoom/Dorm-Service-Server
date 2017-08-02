@@ -90,6 +90,35 @@ module.exports.deleteRecipe = function(req, res) {
 	});
 }
 
+module.exports.canMakeRecipe = function(req, res) {
+	var db = admin.database();
+	recipeExists(req.params.recipeId).then(exists => {
+		if (exists) {
+			var recipeRef = db.ref('/Refrigerator/Recipe/' +
+				req.params.recipeId);
+			return recipeRef.once('value');
+		} else {
+			res.status(500).jsonp({
+				error: 'Recipe "' + req.params.recipeId + '" does not exist'
+			});
+		}
+	})
+	.then(recipe => {
+		db.ref('/Refrigerator/Food/').once('value')
+		.then(availFood => {
+			var foodQuantity = _und.mapObject(availFood.val(),
+				(val, key) => val.quantity);
+			var enoughIngredients =
+				_und.every(recipe.val().ingredients,
+					ingredient =>
+						foodQuantity[ingredient.foodId] > ingredient.quantity);
+			res.status(200).jsonp({
+				status: enoughIngredients
+			});
+		});
+	});
+}
+
 function recipeExists(recipeName, callback) {
 	return new Promise(function(resolve, reject) {
 		var db = admin.database();
