@@ -19,6 +19,10 @@ module.exports.ingredient = {
 		type: 'string',
 		required: true
 	},
+    foodName: {
+        type: 'string',
+        required: true
+    },
 	quantity: {
 		type: 'number',
 		required: true
