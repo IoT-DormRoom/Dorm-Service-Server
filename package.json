@@ -1,5 +1,5 @@
 {
-  "name": "Dorm-Service-Server",
+  "name": "dorm-service-server",
   "version": "1.0.0",
   "description": "RESTful API for IoT Dorm Room",
   "main": "index.js",
@@ -22,8 +22,11 @@
     "express": "^4.15.3",
     "fermata": "^0.11.0-beta1",
     "firebase-admin": "^5.0.0",
-    "jquery": "^1.7.4",
-    "underscore": "^1.8.3"
+    "jquery": "^1.12.4",
+    "jsdom": "^11.1.0",
+    "particle-api-js": "^6.5.0",
+    "underscore": "^1.8.3",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
